@@ -12,11 +12,12 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 
-		Agent agents[] = { new AllC(), new AllD(), new Rand(), new TFT(),
-				new TF2T(), new STFT() };
+		int memoryDepth = 3;
+		Agent agents[] = { new AllC(memoryDepth), new AllD(memoryDepth), new Rand(memoryDepth), new TFT(memoryDepth),
+				new TF2T(memoryDepth), new STFT(memoryDepth) };
 
 		for (int i = 0; i < agents.length; ++i) {
-			for (int j = 0; j < agents.length; ++j) {
+			for (int j = i; j < agents.length; ++j) {
 				playIPD(agents[i], agents[j]);
 			}
 		}
@@ -25,7 +26,9 @@ public class Main {
 	public static void playIPD(Agent player1, Agent player2) {
 
 		System.out.println("Player1 will be " + player1.getName());
+		System.out.println("With strategy string " + player1.printStrategy());
 		System.out.println("Player 2 will be " + player2.getName());
+		System.out.println("With strategy string " + player2.printStrategy() + "\n");
 		
 		player1.reset();
 		player2.reset();

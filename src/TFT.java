@@ -1,27 +1,26 @@
 
-public class TFT implements Agent{
-
-	int oppChoice;
+public class TFT extends Agent{
 	
-	public TFT(){
-		reset();
-	}
-	
-	@Override
-	public int makeChoice() {
-		return oppChoice;
-	}
-
-	@Override
-	public void giveResult(Result result) {
-		oppChoice = result.getOpponentChoice();
-	}
-	
-	public void reset(){
-		oppChoice = 0;
+	public TFT(int memoryDepth){
+		super(memoryDepth);
 	}
 	
 	public String getName(){
 		return "TFT (tit-for-tat)";
+	}
+
+	@Override
+	public void establishPremises() {
+		for(int i = 0; i<premises.length; ++i){
+			premises[i] = 0;//assume we start by cooperating
+		}
+	}
+
+	@Override
+	public void createPlan() {
+		for(int i = 0; i<strategy.length; ++i){
+			int situations[] = invertStrategyIndex(i);
+			strategy[i] = situations[0] % 2;
+		}
 	}
 }

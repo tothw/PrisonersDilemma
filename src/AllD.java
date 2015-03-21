@@ -1,21 +1,25 @@
 
-public class AllD implements Agent{
+public class AllD extends Agent{
 
-	@Override
-	public int makeChoice() {
-		return 1;
-	}
-
-	@Override
-	public void giveResult(Result result){
-		
-	}
-
-	public void reset(){
-		
+	public AllD(int memoryDepth){
+		super(memoryDepth);
 	}
 	
 	public String getName(){
 		return "AllD (always defect)";
+	}
+
+	@Override
+	public void establishPremises() {
+		for(int i = 0; i<premises.length; ++i){
+			premises[i] = 1; //assume defection
+		}
+	}
+
+	@Override
+	public void createPlan() {
+		for(int i = 0; i<strategy.length;++i){
+			strategy[i] = 1;//always defect
+		}
 	}
 }

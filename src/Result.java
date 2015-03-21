@@ -6,12 +6,19 @@
  * after a Prisoner's Dilemma Game
  */
 public class Result {
-	int opponentChoice;
+	int situationCode;
+	/**
+	 * Your choice	Opp Choice	Code
+	 * 0			0			0
+	 * 0			1			1
+	 * 1			0			2
+	 * 1			1			3
+	 */
 	int yourScore;
 	
 	//Setters
-	Result setOpponentChoice(int opponentChoice){
-		this.opponentChoice = opponentChoice;
+	Result setSituationCode(int situationCode){
+		this.situationCode = situationCode;
 		return this;
 	}
 	
@@ -21,8 +28,8 @@ public class Result {
 	}
 	
 	//Getters
-	int getOpponentChoice(){
-		return opponentChoice;
+	int getSituationCode(){
+		return situationCode;
 	}
 	
 	int getYourScore(){

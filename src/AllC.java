@@ -1,22 +1,27 @@
 
-public class AllC implements Agent{
+public class AllC extends Agent{
 
-	@Override
-	public int makeChoice() {
-		return 0;
-	}
-
-	@Override
-	public void giveResult(Result result){
-		
-	}
-	
-	public void reset(){
-		
+	public AllC(int memoryDepth){
+		super(memoryDepth);
 	}
 	
 	public String getName(){
 		return "AllC (always cooperate)";
+	}
+
+	@Override
+	public void establishPremises() {
+		for(int i = 0; i<premises.length; ++i){
+			premises[i] = 0;//assume cooperation
+		}
+		
+	}
+
+	@Override
+	public void createPlan() {
+		for(int i = 0; i<strategy.length; ++i){
+			strategy[i] = 0;//always cooperates
+		}
 	}
 
 }

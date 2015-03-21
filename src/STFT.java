@@ -1,29 +1,26 @@
 
-public class STFT implements Agent {
+public class STFT extends Agent {
 
-
-	int oppChoice;
-	
-	public STFT(){
-		reset();
-	}
-	
-	@Override
-	public int makeChoice() {
-		return oppChoice;
-	}
-
-
-	@Override
-	public void giveResult(Result result) {
-		oppChoice = result.getOpponentChoice();
-	}
-
-	public void reset(){
-		oppChoice = 1;
+	public STFT(int memoryDepth){
+		super(memoryDepth);
 	}
 	
 	public String getName(){
 		return "STFT (suspicious tit-for-tat)";
+	}
+
+	@Override
+	public void establishPremises() {
+		for(int i = 0; i<premises.length; ++i){
+			premises[i] = 1;//assume we start with defecting
+		}
+	}
+
+	@Override
+	public void createPlan() {
+		for(int i = 0; i<strategy.length; ++i){
+			int situations[] = invertStrategyIndex(i);
+			strategy[i] = situations[0] % 2;
+		}
 	}
 }

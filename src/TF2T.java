@@ -1,32 +1,29 @@
 
-public class TF2T implements Agent {
-
-	int oppLastChoice;
-	int oppSecondLastChoice;
+public class TF2T extends Agent {
 	
-	public TF2T(){
-		reset();
-	}
-	
-	@Override
-	public int makeChoice() {
-		if(oppLastChoice == 1 && oppSecondLastChoice ==1)
-			return 1;
-		return 0;
-	}
-
-	@Override
-	public void giveResult(Result result) {
-		oppSecondLastChoice = oppLastChoice;
-		oppLastChoice = result.getOpponentChoice();
-	}
-	
-	public void reset(){
-		oppLastChoice = 0;
-		oppSecondLastChoice = 0;
+	public TF2T(int memoryDepth){
+		super(memoryDepth);
 	}
 	
 	public String getName(){
 		return "TF2T (tit-for-2-tats)";
+	}
+
+	@Override
+	public void establishPremises() {
+		for(int i = 0; i<premises.length; ++i){
+			premises[i] = 0;//assume we start by cooperating
+		}
+	}
+
+	@Override
+	public void createPlan() {
+		for(int i = 0; i<strategy.length; ++i){
+			int situations[] = invertStrategyIndex(i);
+			if(situations[0] % 2 == 1 & situations[1] % 2 == 1) 
+				strategy[i] = 1;
+			else
+				strategy[i] = 0;
+		}
 	}
 }
