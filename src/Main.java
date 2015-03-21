@@ -5,6 +5,7 @@
  *         Main method controls the simulation
  */
 
+
 public class Main {
 
 	/**
@@ -12,15 +13,38 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 
+		//Run a tournament
 		int memoryDepth = 3;
 		Agent agents[] = { new AllC(memoryDepth), new AllD(memoryDepth), new Rand(memoryDepth), new TFT(memoryDepth),
 				new TF2T(memoryDepth), new STFT(memoryDepth) };
-
+		int cumulativeScores[]  = new int[agents.length];
+		for(int i = 0; i<cumulativeScores.length; ++i){
+			cumulativeScores[i] = 0;
+		}
+		
+		
 		for (int i = 0; i < agents.length; ++i) {
 			for (int j = i; j < agents.length; ++j) {
 				playIPD(agents[i], agents[j]);
+				cumulativeScores[i] += agents[i].getTotalScore();
+				cumulativeScores[j] += agents[j].getTotalScore();
 			}
 		}
+		
+		//find max
+		int max = cumulativeScores[0];
+		int winnerIndex = 0;
+		for(int i = 1; i < agents.length; ++i){
+			int finalScore = cumulativeScores[i];
+			if(finalScore > max){
+				max = finalScore;
+				winnerIndex = i;
+			}
+		}
+		
+		System.out.println("The winner of the tournament is " + agents[winnerIndex].getName() + " with a final score of " + max + "\n");
+
+		GeneticAlgorithm ga = new GeneticAlgorithm();
 	}
 
 	public static void playIPD(Agent player1, Agent player2) {
@@ -35,7 +59,7 @@ public class Main {
 		
 		Game game = new Game(player1, player2);
 
-		int totalIterations = 10;
+		int totalIterations = 200;
 
 		for (int i = 1; i <= totalIterations; ++i) {
 			game.play();

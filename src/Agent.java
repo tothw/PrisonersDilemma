@@ -103,4 +103,8 @@ public abstract class Agent {
 		}
 		return sb.toString();
 	}
+	
+	public int getTotalScore(){
+		return totalScore;
+	}
 }
