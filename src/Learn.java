@@ -1,4 +1,6 @@
 import java.io.File;
+
+import weka.classifiers.bayes.NaiveBayesUpdateable;
 import weka.classifiers.trees.HoeffdingTree;
 import weka.core.DenseInstance;
 import weka.core.Instance;
@@ -7,7 +9,7 @@ import weka.core.converters.ArffLoader;
 
 public class Learn extends Agent {
 
-	HoeffdingTree classifier;
+	NaiveBayesUpdateable classifier;
 
 	public Learn(int memoryDepth) throws Exception {
 		super(memoryDepth);
@@ -106,7 +108,7 @@ public class Learn extends Agent {
 	// resets Agent state
 	public void reset() throws Exception {
 		super.reset();
-		classifier = new HoeffdingTree();
+		classifier = new NaiveBayesUpdateable();
 		classifier.setOptions(weka.core.Utils.splitOptions(""));
 		// Load structure of data
 		ArffLoader loader = new ArffLoader();
