@@ -1,5 +1,5 @@
 import java.util.*;
-public class GeneticAlgorithm2{
+public class GeneticAlgorithm{
 	final int memoryDepth = 3;
 	final int generations = 1000;
 	final double mutationRate = 0.001;
@@ -7,7 +7,7 @@ public class GeneticAlgorithm2{
 	GeneticAgent [] population;
 	Agent opponent;
 
-	public GeneticAlgorithm2()throws Exception{
+	public GeneticAlgorithm()throws Exception{
 		population = new GeneticAgent[populationSize];
 		for(int i = 0; i < populationSize; ++i){
 			population[i] = new GeneticAgent(memoryDepth);
@@ -16,7 +16,7 @@ public class GeneticAlgorithm2{
 			for(int i = 0; i < populationSize; ++i) population[i].reset();
 			for(int i = 0; i < populationSize; ++i){
 				for(int k = 0; k < populationSize; ++k){
-					playIPD(populatioidn[i], population[k]);
+					playIPD(population[i], population[k]);
 				}
 			}
 			survivalOfTheFittest();
@@ -46,7 +46,7 @@ public class GeneticAlgorithm2{
 			//System.out.println(game.printResults());
 		}
 	}
-	public void survivalOfTheFittest(){
+	public void survivalOfTheFittest() throws Exception{
 		Arrays.sort(population);
 		for(int i = populationSize / 2; i < populationSize; ++i){
 			int parent1 = getParentIndex();
@@ -57,7 +57,7 @@ public class GeneticAlgorithm2{
 			population[++i] = children[1];
 		}
 	}
-	public GeneticAgent[] Reproduce(int parent1, int parent2){
+	public GeneticAgent[] Reproduce(int parent1, int parent2) throws Exception{
 		GeneticAgent [] children = new GeneticAgent[2];
 		children[0] = new GeneticAgent(memoryDepth);
 		children[1] = new GeneticAgent(memoryDepth);
@@ -107,7 +107,7 @@ public class GeneticAlgorithm2{
 	}
 }
 class GeneticAgent extends Agent implements Comparable<GeneticAgent>{
-	public GeneticAgent(int memoryDepth){
+	public GeneticAgent(int memoryDepth) throws Exception{
 		super(memoryDepth);
 	}
 	public String getName(){
