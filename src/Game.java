@@ -70,6 +70,14 @@ public class Game {
 		totalScore2+=score2;
 	}
 	
+	public int getTotalScore1(){
+		return totalScore1;
+	}
+	
+	public int getTotalScore2(){
+		return totalScore2;
+	}
+	
 	public String printResults(){
 		return "Player 1 chose " + choice1 + "\n"
 		+ "Player 2 chose " + choice2 + "\n"
