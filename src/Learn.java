@@ -1,9 +1,5 @@
 import java.io.File;
-import weka.classifiers.bayes.NaiveBayesUpdateable;
-import weka.classifiers.lazy.IBk;
-import weka.classifiers.lazy.KStar;
 import weka.classifiers.trees.HoeffdingTree;
-import weka.core.Attribute;
 import weka.core.DenseInstance;
 import weka.core.Instance;
 import weka.core.Instances;

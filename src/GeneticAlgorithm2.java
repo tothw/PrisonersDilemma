@@ -2,21 +2,26 @@ import java.util.*;
 public class GeneticAlgorithm2{
 	final int memoryDepth = 3;
 	final int generations = 1000;
-	final double mutationRate = 0.001;
-	final int populationSize = 11;
+	final double mutationRate = 0.1;
+	final int populationSize = 100;
 	GeneticAgent [] population;
 	Agent opponent;
 
 	public GeneticAlgorithm2()throws Exception{
 		population = new GeneticAgent[populationSize];
+		Agent agents[] = { new AllC(memoryDepth), new AllD(memoryDepth), new Rand(memoryDepth), new TFT(memoryDepth),
+				new TF2T(memoryDepth), new STFT(memoryDepth)};
 		for(int i = 0; i < populationSize; ++i){
 			population[i] = new GeneticAgent(memoryDepth);
 		}
 		for(int j = 0; j < generations; ++j){
 			for(int i = 0; i < populationSize; ++i) population[i].reset();
 			for(int i = 0; i < populationSize; ++i){
-				for(int k = 0; k < populationSize; ++k){
-					playIPD(populatioidn[i], population[k]);
+				/**for(int k = 0; k < populationSize; ++k){
+					playIPD(population[i], population[k]);
+				}**/
+				for(int k = 0; k<agents.length; ++k){
+					playIPD(population[i], agents[k]);
 				}
 			}
 			survivalOfTheFittest();
@@ -46,7 +51,7 @@ public class GeneticAlgorithm2{
 			//System.out.println(game.printResults());
 		}
 	}
-	public void survivalOfTheFittest(){
+	public void survivalOfTheFittest() throws Exception{
 		Arrays.sort(population);
 		for(int i = populationSize / 2; i < populationSize; ++i){
 			int parent1 = getParentIndex();
@@ -57,7 +62,7 @@ public class GeneticAlgorithm2{
 			population[++i] = children[1];
 		}
 	}
-	public GeneticAgent[] Reproduce(int parent1, int parent2){
+	public GeneticAgent[] Reproduce(int parent1, int parent2) throws Exception{
 		GeneticAgent [] children = new GeneticAgent[2];
 		children[0] = new GeneticAgent(memoryDepth);
 		children[1] = new GeneticAgent(memoryDepth);
@@ -107,7 +112,7 @@ public class GeneticAlgorithm2{
 	}
 }
 class GeneticAgent extends Agent implements Comparable<GeneticAgent>{
-	public GeneticAgent(int memoryDepth){
+	public GeneticAgent(int memoryDepth) throws Exception{
 		super(memoryDepth);
 	}
 	public String getName(){

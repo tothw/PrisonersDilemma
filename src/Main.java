@@ -16,7 +16,7 @@ public class Main {
 
 		//Run a tournament
 		int memoryDepth = 3;
-		String chromosome = "0101011101110011101101101111101101111001010101110111001110110110111110";
+		String chromosome = new GeneticAlgorithm2().returnToToth();
 		Agent agents[] = { new AllC(memoryDepth), new AllD(memoryDepth), new Rand(memoryDepth), new TFT(memoryDepth),
 				new TF2T(memoryDepth), new STFT(memoryDepth), new Learn(memoryDepth), new Genetic(memoryDepth, chromosome)};
 		int cumulativeScores[]  = new int[agents.length];

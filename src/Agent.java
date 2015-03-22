@@ -49,7 +49,7 @@ public abstract class Agent {
 		createPlan();
 	}
 	
-	private int power(int memoryDepth){
+	int power(int memoryDepth){
 		int retval = 1;
 		for(int i = 0; i<memoryDepth; ++i){
 			retval *= 4;
