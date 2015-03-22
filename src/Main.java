@@ -29,7 +29,7 @@ public class Main {
 		
 		
 		for (int i = 0; i < agents.length; ++i) {
-			for (int j = i; j < opponents.length; ++j) {
+			for (int j = i+1; j < opponents.length; ++j) {
 				playIPD(agents[i], opponents[j]);
 				cumulativeScores[i] += agents[i].getTotalScore();
 				cumulativeScores[j] += opponents[j].getTotalScore();
@@ -64,7 +64,7 @@ public class Main {
 		
 		Game game = new Game(player1, player2);
 
-		int totalIterations = 300;
+		int totalIterations = 200;
 
 		for (int i = 1; i <= totalIterations; ++i) {
 			game.play();
