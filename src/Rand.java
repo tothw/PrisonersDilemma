@@ -2,7 +2,7 @@ import java.util.Random;
 
 public class Rand extends Agent{
 
-	public Rand(int memoryDepth){
+	public Rand(int memoryDepth) throws Exception{
 		super(memoryDepth);
 	}
 	

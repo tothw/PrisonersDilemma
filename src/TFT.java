@@ -1,7 +1,7 @@
 
 public class TFT extends Agent{
 	
-	public TFT(int memoryDepth){
+	public TFT(int memoryDepth) throws Exception{
 		super(memoryDepth);
 	}
 	

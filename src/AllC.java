@@ -1,7 +1,7 @@
 
 public class AllC extends Agent{
 
-	public AllC(int memoryDepth){
+	public AllC(int memoryDepth) throws Exception{
 		super(memoryDepth);
 	}
 	

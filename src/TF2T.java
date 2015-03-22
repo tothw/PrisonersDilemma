@@ -1,7 +1,7 @@
 
 public class TF2T extends Agent {
 	
-	public TF2T(int memoryDepth){
+	public TF2T(int memoryDepth) throws Exception{
 		super(memoryDepth);
 	}
 	

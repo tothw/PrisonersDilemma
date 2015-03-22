@@ -26,7 +26,7 @@ public abstract class Agent {
 	int premises[]; 
 	//Premises is an array encoding what to do during the start of the game
 	
-	public Agent(int memoryDepth){
+	public Agent(int memoryDepth) throws Exception{
 		this.memoryDepth = memoryDepth;
 		turn = 0;
 		premises = new int[2*memoryDepth];
@@ -82,7 +82,7 @@ public abstract class Agent {
 		memory[0] = result.getSituationCode();
 	}
 	//resets Agent state
-	public void reset(){
+	public void reset() throws Exception{
 		memory = new int[memoryDepth];
 		for(int i = 0; i<memoryDepth; ++i){
 			memory[i] = 2*premises[2*i] + premises[2*i+1];

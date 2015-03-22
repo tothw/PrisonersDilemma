@@ -10,13 +10,14 @@ public class Main {
 
 	/**
 	 * @param args
+	 * @throws Exception 
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 
 		//Run a tournament
 		int memoryDepth = 3;
 		Agent agents[] = { new AllC(memoryDepth), new AllD(memoryDepth), new Rand(memoryDepth), new TFT(memoryDepth),
-				new TF2T(memoryDepth), new STFT(memoryDepth) };
+				new TF2T(memoryDepth), new STFT(memoryDepth), new Learn(memoryDepth) };
 		int cumulativeScores[]  = new int[agents.length];
 		for(int i = 0; i<cumulativeScores.length; ++i){
 			cumulativeScores[i] = 0;
@@ -47,7 +48,7 @@ public class Main {
 		System.out.println("The winner of the tournament is " + agents[winnerIndex].getName() + " with a final score of " + max + "\n");
 	}
 
-	public static void playIPD(Agent player1, Agent player2) {
+	public static void playIPD(Agent player1, Agent player2) throws Exception {
 
 		System.out.println("Player1 will be " + player1.getName());
 		System.out.println("With strategy string " + player1.printStrategy());

@@ -1,7 +1,7 @@
 
 public class STFT extends Agent {
 
-	public STFT(int memoryDepth){
+	public STFT(int memoryDepth) throws Exception{
 		super(memoryDepth);
 	}
 	

@@ -1,0 +1,11 @@
+@RELATION oppstrategy
+
+@ATTRIBUTE lastmove NUMERIC
+@ATTRIBUTE secondlastmove NUMERIC
+@ATTRIBUTE thirdlastmove NUMERIC
+@ATTRIBUTE opplastmove NUMERIC
+@ATTRIBUTE oppsecondlastmove NUMERIC
+@ATTRIBUTE oppthirdlastmove NUMERIC
+@ATTRIBUTE nextmove 	{0, 1}
+
+@DATA
