@@ -88,6 +88,7 @@ public abstract class Agent {
 			memory[i] = 2*premises[2*i] + premises[2*i+1];
 		}
 		totalScore = 0;
+		turn = 0;
 	}
 	//prints strategy name
 	public abstract String getName();

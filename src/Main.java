@@ -45,7 +45,6 @@ public class Main {
 			System.out.println("Agent : " + agents[i].getName() + " final score: " + cumulativeScores[i]);
 		}
 		System.out.println("The winner of the tournament is " + agents[winnerIndex].getName() + " with a final score of " + max + "\n");
-
 	}
 
 	public static void playIPD(Agent player1, Agent player2) {
