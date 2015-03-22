@@ -3,20 +3,22 @@ public class GeneticAlgorithm{
 	final int memoryDepth = 3;
 	final int generations = 1000;
 	final double mutationRate = 0.001;
-	final int populationSize = 11;
+	final int populationSize = 100;
 	GeneticAgent [] population;
-	Agent opponent;
 
 	public GeneticAlgorithm()throws Exception{
 		population = new GeneticAgent[populationSize];
 		for(int i = 0; i < populationSize; ++i){
 			population[i] = new GeneticAgent(memoryDepth);
 		}
+		Agent [] opponents = { new AllC(memoryDepth), new AllD(memoryDepth), new Rand(memoryDepth), new TFT(memoryDepth),
+				new TF2T(memoryDepth), new STFT(memoryDepth)};
 		for(int j = 0; j < generations; ++j){
 			for(int i = 0; i < populationSize; ++i) population[i].reset();
+			for(int k = 0; k < opponents.length; ++k) opponents[k].reset();
 			for(int i = 0; i < populationSize; ++i){
-				for(int k = 0; k < populationSize; ++k){
-					playIPD(population[i], population[k]);
+				for(int k = 0; k < opponents.length; ++k){
+					playIPD(population[i], opponents[k]);
 				}
 			}
 			survivalOfTheFittest();
@@ -37,7 +39,7 @@ public class GeneticAlgorithm{
 
 		Game game = new Game(player1, player2);
 
-		int totalIterations = 100;
+		int totalIterations = 200;
 
 		for (int i = 1; i <= totalIterations; ++i) {
 			game.play();
