@@ -18,7 +18,10 @@ public class Main {
 		int memoryDepth = 3;
 		String chromosome = new GeneticAlgorithm().returnToToth();
 		Agent agents[] = { new AllC(memoryDepth), new AllD(memoryDepth), new Rand(memoryDepth), new TFT(memoryDepth),
-				new TF2T(memoryDepth), new STFT(memoryDepth), new Learn(memoryDepth), new Genetic(memoryDepth, chromosome)};
+				new TF2T(memoryDepth), new STFT(memoryDepth), new Learn(memoryDepth), new LearnAhead(memoryDepth), new Genetic(memoryDepth, chromosome)};
+		Agent opponents[] = { new AllC(memoryDepth), new AllD(memoryDepth), new Rand(memoryDepth), new TFT(memoryDepth),
+				new TF2T(memoryDepth), new STFT(memoryDepth), new Learn(memoryDepth), new LearnAhead(memoryDepth), new Genetic(memoryDepth, chromosome)};
+		
 		int cumulativeScores[]  = new int[agents.length];
 		for(int i = 0; i<cumulativeScores.length; ++i){
 			cumulativeScores[i] = 0;
@@ -26,10 +29,10 @@ public class Main {
 		
 		
 		for (int i = 0; i < agents.length; ++i) {
-			for (int j = i; j < agents.length; ++j) {
-				playIPD(agents[i], agents[j]);
+			for (int j = i; j < opponents.length; ++j) {
+				playIPD(agents[i], opponents[j]);
 				cumulativeScores[i] += agents[i].getTotalScore();
-				cumulativeScores[j] += agents[j].getTotalScore();
+				cumulativeScores[j] += opponents[j].getTotalScore();
 			}
 		}
 		
@@ -61,7 +64,7 @@ public class Main {
 		
 		Game game = new Game(player1, player2);
 
-		int totalIterations = 200;
+		int totalIterations = 300;
 
 		for (int i = 1; i <= totalIterations; ++i) {
 			game.play();
