@@ -1,5 +1,8 @@
 import java.io.File;
 import weka.classifiers.bayes.NaiveBayesUpdateable;
+import weka.classifiers.lazy.IBk;
+import weka.classifiers.lazy.KStar;
+import weka.classifiers.trees.HoeffdingTree;
 import weka.core.Attribute;
 import weka.core.DenseInstance;
 import weka.core.Instance;
@@ -8,7 +11,7 @@ import weka.core.converters.ArffLoader;
 
 public class Learn extends Agent {
 
-	NaiveBayesUpdateable nb;
+	HoeffdingTree classifier;
 
 	public Learn(int memoryDepth) throws Exception {
 		super(memoryDepth);
@@ -44,7 +47,7 @@ public class Learn extends Agent {
 				structure.setClassIndex(structure.numAttributes() - 1);
 				structure.add(inst);
 				structure.setClassIndex(structure.numAttributes() - 1);
-				choice = (int) nb.classifyInstance(structure.firstInstance());
+				choice = (int) classifier.classifyInstance(structure.firstInstance());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -98,7 +101,7 @@ public class Learn extends Agent {
 			structure.setClassIndex(structure.numAttributes() - 1);
 			structure.add(inst);
 			structure.setClassIndex(structure.numAttributes() - 1);
-			nb.updateClassifier(structure.firstInstance());
+			classifier.updateClassifier(structure.firstInstance());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -107,17 +110,18 @@ public class Learn extends Agent {
 	// resets Agent state
 	public void reset() throws Exception {
 		super.reset();
-		nb = new NaiveBayesUpdateable();
+		classifier = new HoeffdingTree();
+		classifier.setOptions(weka.core.Utils.splitOptions(""));
 		// Load structure of data
 		ArffLoader loader = new ArffLoader();
 		loader.setFile(new File("structure.arff"));
 		Instances structure = loader.getStructure();
 		structure.setClassIndex(structure.numAttributes() - 1);
-		nb.buildClassifier(structure);
+		classifier.buildClassifier(structure);
 		// train nb
 		Instance current;
 		while ((current = loader.getNextInstance(structure)) != null) {
-			nb.updateClassifier(current);
+			classifier.updateClassifier(current);
 		}
 	}
 

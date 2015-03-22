@@ -20,6 +20,8 @@ public abstract class Agent {
 	 **/
 	int memoryDepth;
 	
+	String chromosome;
+	
 	int strategy[];
 	//Strategy is an array of size 4^memoryDepth encoding what to do in each possible situation
 
@@ -30,9 +32,20 @@ public abstract class Agent {
 		this.memoryDepth = memoryDepth;
 		turn = 0;
 		premises = new int[2*memoryDepth];
+		strategy = new int[power(memoryDepth)];
 		establishPremises();
 		reset();
+		createPlan();
+	}
+	
+	public Agent(int memoryDepth, String chromosome) throws Exception{
+		this.chromosome = chromosome;
+		this.memoryDepth = memoryDepth;
+		turn = 0;
+		premises = new int[2*memoryDepth];
 		strategy = new int[power(memoryDepth)];
+		establishPremises();
+		reset();
 		createPlan();
 	}
 	
