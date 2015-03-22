@@ -1,181 +1,134 @@
-// Code Written By: Matthew Kelly
-// UWin id: kelly112
 import java.util.*;
-// NOTE 0 is COOPERATE and 1 is DEFECT
-public class GeneticAlgorithm {
-	// players is the population of each generation, each Player has a chromosome(64-bit strategy of how it plays IPD)
-	private Player [] players;
-	// opponent is the chromosome of the opponent each player in the population will play
-	private String opponent;
-	// this is the chance that a random bit will be flipped in a childs chromosome during reproduction
-	private final double mutationRate = 0.001;
-	// this is the matrix that denotes the payoff of the game, dependant on both players
-	private int payoff1[][];
+public class GeneticAlgorithm2{
+	final int memoryDepth = 3;
+	final int generations = 1000;
+	final double mutationRate = 0.001;
+	final int populationSize = 11;
+	GeneticAgent [] population;
+	Agent opponent;
 
-	public GeneticAlgorithm() {
-		init();
-		// for 1000 generations
-		for(int i=0; i < 1000; i++) {
-			// reset the calculated fitness of the population
-			for(int j = 0; j < 100; j++)
-				players[j].setFitness(0);
-			// generate an opponent to be played against
-			generateNewOpponent();
-			// calculate the fitness of the new generation, based on the current opponent
-			calculateFitness();
-			// create a new population of the 'fittest'
+	public GeneticAlgorithm2()throws Exception{
+		population = new GeneticAgent[populationSize];
+		for(int i = 0; i < populationSize; ++i){
+			population[i] = new GeneticAgent(memoryDepth);
+		}
+		for(int j = 0; j < generations; ++j){
+			for(int i = 0; i < populationSize; ++i) population[i].reset();
+			for(int i = 0; i < populationSize; ++i){
+				for(int k = 0; k < populationSize; ++k){
+					playIPD(populatioidn[i], population[k]);
+				}
+			}
 			survivalOfTheFittest();
+			System.out.println(population[0].printStrategy() + "  :  " + population[0].totalScore);
 		}
-		// print out the fittest player
-		System.out.println(players[0]);
 	}
-	// initialize things (what else would init do?)
-	private void init() {
-		// initialize the population
-		players = new Player[100];
-		// for each player in the population
-		for(int i = 0; i < 100; i++){
-			// initialize each player
-			players[i] = new Player();
-			// generate a chromosome for each player
-			for(int j = 0; j < 64; j++){
-				players[i].setChromosome(players[i].getChromosome()  + (int)(Math.random() + 0.5));
-			}
+	public String returnToToth(){
+		return population[0].printStrategy();
+	}
+	public void playIPD(Agent player1, Agent player2){
+		//		System.out.println("Player1 will be " + player1.getName());
+		//		System.out.println("With strategy string " + player1.printStrategy());
+		//		System.out.println("Player 2 will be " + player2.getName());
+		//		System.out.println("With strategy string " + player2.printStrategy() + "\n");
+
+		//player1.reset();
+		//player2.reset();
+
+		Game game = new Game(player1, player2);
+
+		int totalIterations = 100;
+
+		for (int i = 1; i <= totalIterations; ++i) {
+			game.play();
+
+			//System.out.println("During iteration " + i + ":");
+			//System.out.println(game.printResults());
 		}
-		// initialize the payoff matrix based on IPD
-		payoff1 = new int[2][2];
-		payoff1[0][0] = 3;
-		payoff1[0][1] = 0;
-		payoff1[1][0] = 5;
-		payoff1[1][1] = 1;
-
 	}
-
-	// generate the chromosome of the opponent, currently this is done with random bits
-	private void generateNewOpponent(){
-		opponent = "";
-		for(int i = 0; i < 64; i++)
-			opponent += (int)(Math.random() + 0.5);
-
+	public void survivalOfTheFittest(){
+		Arrays.sort(population);
+		for(int i = populationSize / 2; i < populationSize; ++i){
+			int parent1 = getParentIndex();
+			int parent2 = getParentIndex();
+			while(parent1 == parent2) parent2 = getParentIndex();
+			GeneticAgent [] children = Reproduce(parent1, parent2);
+			population[i] = children[0];
+			population[++i] = children[1];
+		}
 	}
-	// calculate the fitness of each player in the generation against the opponent
-	private void calculateFitness() {
+	public GeneticAgent[] Reproduce(int parent1, int parent2){
+		GeneticAgent [] children = new GeneticAgent[2];
+		children[0] = new GeneticAgent(memoryDepth);
+		children[1] = new GeneticAgent(memoryDepth);
+
+		String chromosome1 = "";
+		String chromosome2 = "";
+		for(int i = 0; i < children[0].power(memoryDepth); ++i){
+			chromosome1 += population[parent1].strategy[i];
+			chromosome2 += population[parent2].strategy[i];
+		}
+		for(int i = 0; i < 2 * memoryDepth; ++i){
+			chromosome1 += population[parent1].premises[i];
+			chromosome2 += population[parent2].premises[i];
+		}
+		int crossover = (int)(Math.random() * (chromosome1.length() / 2));
+		String chromo1sub1 = chromosome1.substring(0,crossover);
+		String chromo1sub2 = chromosome1.substring(crossover);
+		String chromo2sub1 = chromosome2.substring(0, chromosome2.length() - crossover);
+		String chromo2sub2 = chromosome2.substring(chromosome2.length() - crossover);
+		chromosome1 = chromo2sub2 + chromo1sub2;
+		chromosome2 = chromo1sub1 + chromo2sub1;
+		if(Math.random() < mutationRate)
+			chromosome1 = mutate(chromosome1);
+		if(Math.random() < mutationRate)
+			chromosome2 = mutate(chromosome2);
+		int i;
 		char zero = '0';
-		for(int i = 0; i < 100; i++){
-			for(int j = 0; j < 64; j++){
-				char p = players[i].getChromosome().charAt(j);
-				char o = opponent.charAt(j);
-
-				int p1 = p - zero;
-				int p2 = o - zero;
-				players[i].setFitness(players[i].getFitness() + payoff1[p1][p2]);
-			}
+		for(i = 0; i < children[0].power(memoryDepth); ++i){
+			children[0].strategy[i] = chromosome1.charAt(i) - zero;
+			children[1].strategy[i] = chromosome2.charAt(i) - zero;
 		}
-	}
-	/* sorts the population based on fitness, greatest appearing first in the list
-	 * chooses 2 random, different parents from the fitter half, and uses them to create
-	 * new children for the less fit half
-	 */
-	private void survivalOfTheFittest() {
-		Arrays.sort(players);
-		// for the less fit (last) half of the population, generate new children in pairs
-		for(int i = 50; i < 100; i+=2){
-			int parent1 = (int)(Math.random() * 50);
-			int parent2 = (int)(Math.random() * 50);
-			while(parent1 == parent2) parent2 = (int)(Math.random() * 50);
-			Player[] children = Reproduce(parent1, parent2);
-			players[i] = children[0];
-			players[i+1] = children[1];
+		for(int j = 0; i < chromosome1.length(); ++i,++j){
+			children[0].premises[j] = chromosome1.charAt(i) - zero;
+			children[1].premises[j] = chromosome2.charAt(i) - zero;
 		}
-	}
-	// method to generate 2 new children based on 2 parents
-	private Player[] Reproduce(int parent1, int parent2) {
-		// initialize 2 new players to be returned (the children)
-		Player[] children = new Player[2];
-		children[0] = new Player();
-		children[1] = new Player();
-		// set each child chromosome to a parents' chromosome
-		String kid1 = players[parent1].getChromosome();
-		String kid2 = players[parent2].getChromosome();
-		// select a random crossover point, allowing crossover up to half of the chromosome
-		int crossover = (int)(Math.random() * 32);
-		// based on the crossover separate the front of the first and the back of the last as the crossover strings
-		String kid1sub1 = kid1.substring(0, crossover);
-		String kid1sub2 = kid1.substring(crossover);
-		String kid2sub1 = kid2.substring(0, kid2.length() - crossover);
-		String kid2sub2 = kid2.substring(kid2.length() - crossover);
-		// crossover the back of the second with the back of the first
-		kid1 = kid2sub2 + kid1sub2;
-		// crossover the front of the first with the front of the second
-		kid2 = kid1sub1 + kid2sub1;
-		// which bit to flip
-		int mutation;
-		// string before the flipped bit
-		String beg;
-		// flipped bit
-		String flip;
-		// string after the flipped bit
-		String end;
-		// based on the mutationRate, mutate child1
-		if(Math.random() < mutationRate){
-			// choose a random bit to mutate
-			mutation = (int)(Math.random() * 64);
-			// store the beginning of the string
-			beg = kid1.substring(0, mutation);
-			// store the flipped bit (mutation)
-			if(kid1.charAt(mutation)=='0')
-				flip = "1";
-			else
-				flip = "0";
-			// store the end of the string
-			end = kid1.substring(mutation+1);
-			// set child1 to be with the mutation
-			kid1 = beg + flip + end;
-		}
-		// same as above but for child2
-		if(Math.random() < mutationRate){
-			mutation = (int)(Math.random() * 64);
-			beg = kid2.substring(0, mutation);
-			if(kid2.charAt(mutation)=='0')
-				flip = "1";
-			else
-				flip = "0";
-			end = kid2.substring(mutation+1);
-			kid2 = beg + flip + end;
-		}
-		// after mutation set the 2 children's chromosomes
-		children[0].setChromosome(kid1);
-		children[1].setChromosome(kid2);
-		// return the children created by the parents
 		return children;
 	}
-	// class to store each player's chromosome and fitness, used to sort based on fitness
-	private class Player implements Comparable<Player> {
-		private String chromosome;
-		private int fitness;
-		public Player(){
-			chromosome = "";
-			fitness = 0;
+	public String mutate(String chromosome){
+		int mutation = (int)(Math.random() * chromosome.length());
+		String beg = chromosome.substring(0,mutation);
+		String flip = (chromosome.charAt(mutation) == 0) ? "1":"0";
+		String end = chromosome.substring(mutation + 1);
+		return beg + flip + end;
+	}
+	public int getParentIndex(){
+		return (int)(Math.random() * populationSize / 2);
+	}
+}
+class GeneticAgent extends Agent implements Comparable<GeneticAgent>{
+	public GeneticAgent(int memoryDepth){
+		super(memoryDepth);
+	}
+	public String getName(){
+		return "Genetic Algorithm";
+	}
+	@Override
+	public void establishPremises(){
+		for(int i = 0; i < 2 * memoryDepth; ++i){
+			premises[i] = randomBit();
 		}
-		// getters and setters for chromosome and fitness
-		public void setChromosome(String chromo){
-			chromosome = chromo;
+	}
+	@Override
+	public void createPlan(){
+		for(int i = 0; i < power(memoryDepth); ++i){
+			strategy[i] = randomBit();
 		}
-		public void setFitness(int fit){
-			fitness = fit;
-		}
-		public String getChromosome(){
-			return chromosome;
-		}
-		public int getFitness(){
-			return fitness;
-		}
-		// when sorting players, sort by fittest first
-		public int compareTo(Player player){
-			return (new Integer(player.getFitness())).compareTo(new Integer(fitness));
-		}
-		public String toString() {
-			return "Chromosome: " + chromosome + ", Fitness: " + fitness;
-		}
+	}
+	public int randomBit(){
+		return (int)(Math.random() + 0.5);
+	}
+	public int compareTo(GeneticAgent agent){
+		return (new Integer(agent.totalScore).compareTo(new Integer(totalScore)));
 	}
 }
