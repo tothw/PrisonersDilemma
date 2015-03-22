@@ -22,8 +22,7 @@ public abstract class Agent {
 	
 	int strategy[];
 	//Strategy is an array of size 4^memoryDepth encoding what to do in each possible situation
-	
-	int firstMove;
+
 	int premises[]; 
 	//Premises is an array encoding what to do during the start of the game
 	
@@ -86,7 +85,7 @@ public abstract class Agent {
 	public void reset(){
 		memory = new int[memoryDepth];
 		for(int i = 0; i<memoryDepth; ++i){
-			memory[i] = premises[i];
+			memory[i] = 2*premises[2*i] + premises[2*i+1];
 		}
 		totalScore = 0;
 	}
