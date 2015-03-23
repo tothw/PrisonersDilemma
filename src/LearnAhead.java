@@ -1,7 +1,7 @@
 public class LearnAhead extends Learn{
 
 	public LearnAhead(int memoryDepth) throws Exception {
-		super(memoryDepth);
+		super(memoryDepth, new PredictionCounter());
 	}
 	
 	int lookAhead() throws Exception{

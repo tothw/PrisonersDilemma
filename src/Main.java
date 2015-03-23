@@ -17,16 +17,19 @@ public class Main {
 		int memoryDepth = 3;
 		String chromosome = new GeneticAlgorithm().returnToToth();
 		String chromosomeb = new HillAlgorithm().returnToToth();
+		
+		PredictionCounter predictionCounter = new PredictionCounter();
+		
 		Agent agents[] = { new AllC(memoryDepth), new AllD(memoryDepth),
 				new Rand(memoryDepth), new TFT(memoryDepth),
 				new TF2T(memoryDepth), new STFT(memoryDepth),
-				new Learn(memoryDepth), new LearnAhead(memoryDepth),
+				new Learn(memoryDepth,predictionCounter), new LearnAhead(memoryDepth),
 				new Genetic(memoryDepth, chromosome),
 				new Hill(memoryDepth, chromosomeb) };
 		Agent opponents[] = { new AllC(memoryDepth), new AllD(memoryDepth),
 				new Rand(memoryDepth), new TFT(memoryDepth),
 				new TF2T(memoryDepth), new STFT(memoryDepth),
-				new Learn(memoryDepth), new LearnAhead(memoryDepth),
+				new Learn(memoryDepth, predictionCounter), new LearnAhead(memoryDepth),
 				new Genetic(memoryDepth, chromosome),
 				new Hill(memoryDepth, chromosomeb)};
 
@@ -62,6 +65,7 @@ public class Main {
 				+ agents[winnerIndex].getName() + " with a final score of "
 				+ max + "\n");
 		
+		System.out.println("Learn made " + 100*predictionCounter.getAccuracy() + "% accurate predictions");
 		System.out.println("Genetic played using chromosome: " + chromosome);
 		System.out.println("Hill-climbing played using chromosome: " + chromosomeb);
 	}
@@ -79,7 +83,7 @@ public class Main {
 
 		Game game = new Game(player1, player2);
 
-		int totalIterations = 200;
+		int totalIterations = 1000;
 
 		for (int i = 1; i <= totalIterations; ++i) {
 			game.play();

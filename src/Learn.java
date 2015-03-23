@@ -9,9 +9,13 @@ import weka.core.converters.ArffLoader;
 public class Learn extends Agent {
 
 	NaiveBayesUpdateable classifier;
-
-	public Learn(int memoryDepth) throws Exception {
+	PredictionCounter predictionCounter;
+	
+	ArffLoader loader;
+	 
+	public Learn(int memoryDepth, PredictionCounter predictionCounter) throws Exception {
 		super(memoryDepth);
+		this.predictionCounter = predictionCounter;
 	}
 
 	public int makePrediction(int[] state) throws Exception{
@@ -33,9 +37,7 @@ public class Learn extends Agent {
 		inst.setValue(4, memory[1] % 2);
 		inst.setValue(5, memory[2] % 2);
 		
-		
-			ArffLoader loader = new ArffLoader();
-			loader.setFile(new File("structure.arff"));
+
 			Instances structure = loader.getStructure();
 			structure.setClassIndex(structure.numAttributes() - 1);
 			structure.add(inst);
@@ -69,6 +71,11 @@ public class Learn extends Agent {
 
 	public void giveResult(Result result){
 		learnFrom(result);
+		if(turn > 30){
+			if(result.situationCode == 0 || result.situationCode == 3)
+				predictionCounter.correctPredictions += 1;
+			predictionCounter.totalPredictions +=1;
+		}
 		super.giveResult(result);
 	}
 	
@@ -92,8 +99,6 @@ public class Learn extends Agent {
 		inst.setValue(6, result.getSituationCode() % 2);
 		
 		try {
-			ArffLoader loader = new ArffLoader();
-			loader.setFile(new File("structure.arff"));
 			Instances structure = loader.getStructure();
 			structure.setClassIndex(structure.numAttributes() - 1);
 			structure.add(inst);
@@ -110,7 +115,7 @@ public class Learn extends Agent {
 		classifier = new NaiveBayesUpdateable();
 		classifier.setOptions(weka.core.Utils.splitOptions(""));
 		// Load structure of data
-		ArffLoader loader = new ArffLoader();
+		loader = new ArffLoader();
 		loader.setFile(new File("structure.arff"));
 		Instances structure = loader.getStructure();
 		structure.setClassIndex(structure.numAttributes() - 1);
