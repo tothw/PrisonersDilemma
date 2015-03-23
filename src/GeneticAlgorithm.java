@@ -27,8 +27,12 @@ public class GeneticAlgorithm{
 			}
 			// adapts the chromosomes of the population, by creating children from the fitter half
 			survivalOfTheFittest();
+<<<<<<< HEAD
 			// prints out the top dog of each generation
 			System.out.println(population[0].printStrategy() + "  :  " + population[0].totalScore);
+=======
+			//System.out.println(population[0].printStrategy() + "  :  " + population[0].totalScore);
+>>>>>>> d4d1e9fe596c30f234a527ff05006522ec81c770
 		}
 	}
 	// method to return needed information to Toth in MAIN
