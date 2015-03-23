@@ -8,8 +8,8 @@ public class Genetic extends Agent{
 	@Override
 	public void establishPremises() {
 		for(int i = strategy.length; i<strategy.length + premises.length; ++i){
-			System.out.println(i);
-			System.out.println(chromosome);
+			//System.out.println(i);
+			//System.out.println(chromosome);
 			premises[i - strategy.length] = (int)(chromosome.charAt(i) - '0');
 		}
 	}

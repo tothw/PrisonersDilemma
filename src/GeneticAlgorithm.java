@@ -22,7 +22,7 @@ public class GeneticAlgorithm{
 				}
 			}
 			survivalOfTheFittest();
-			System.out.println(population[0].printStrategy() + "  :  " + population[0].totalScore);
+			//System.out.println(population[0].printStrategy() + "  :  " + population[0].totalScore);
 		}
 	}
 	public String returnToToth(){

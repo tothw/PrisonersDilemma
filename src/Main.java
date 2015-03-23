@@ -17,8 +17,9 @@ public class Main {
 		//Run a tournament
 		int memoryDepth = 3;
 		String chromosome = new GeneticAlgorithm().returnToToth();
+		String chromosomeb = new HillAlgorithm().returnToToth();
 		Agent agents[] = { new AllC(memoryDepth), new AllD(memoryDepth), new Rand(memoryDepth), new TFT(memoryDepth),
-				new TF2T(memoryDepth), new STFT(memoryDepth), new Learn(memoryDepth), new Genetic(memoryDepth, chromosome)};
+				new TF2T(memoryDepth), new STFT(memoryDepth), new Learn(memoryDepth), new Genetic(memoryDepth, chromosome), new Hill(memoryDepth,chromosomeb)};
 		int cumulativeScores[]  = new int[agents.length];
 		for(int i = 0; i<cumulativeScores.length; ++i){
 			cumulativeScores[i] = 0;
