@@ -19,7 +19,14 @@ public class Main {
 		String chromosome = new GeneticAlgorithm().returnToToth();
 		String chromosomeb = new HillAlgorithm().returnToToth();
 		Agent agents[] = { new AllC(memoryDepth), new AllD(memoryDepth), new Rand(memoryDepth), new TFT(memoryDepth),
+<<<<<<< HEAD
 				new TF2T(memoryDepth), new STFT(memoryDepth), new Learn(memoryDepth), new Genetic(memoryDepth, chromosome), new Hill(memoryDepth,chromosomeb)};
+=======
+				new TF2T(memoryDepth), new STFT(memoryDepth), new Learn(memoryDepth), new LearnAhead(memoryDepth), new Genetic(memoryDepth, chromosome)};
+		Agent opponents[] = { new AllC(memoryDepth), new AllD(memoryDepth), new Rand(memoryDepth), new TFT(memoryDepth),
+				new TF2T(memoryDepth), new STFT(memoryDepth), new Learn(memoryDepth), new LearnAhead(memoryDepth), new Genetic(memoryDepth, chromosome)};
+		
+>>>>>>> 0321b2ba8a78b9de863cf106728909ed9151f0ba
 		int cumulativeScores[]  = new int[agents.length];
 		for(int i = 0; i<cumulativeScores.length; ++i){
 			cumulativeScores[i] = 0;
@@ -27,10 +34,10 @@ public class Main {
 		
 		
 		for (int i = 0; i < agents.length; ++i) {
-			for (int j = i; j < agents.length; ++j) {
-				playIPD(agents[i], agents[j]);
+			for (int j = i+1; j < opponents.length; ++j) {
+				playIPD(agents[i], opponents[j]);
 				cumulativeScores[i] += agents[i].getTotalScore();
-				cumulativeScores[j] += agents[j].getTotalScore();
+				cumulativeScores[j] += opponents[j].getTotalScore();
 			}
 		}
 		

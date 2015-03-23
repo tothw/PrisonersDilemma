@@ -1,7 +1,6 @@
 import java.io.File;
 
 import weka.classifiers.bayes.NaiveBayesUpdateable;
-import weka.classifiers.trees.HoeffdingTree;
 import weka.core.DenseInstance;
 import weka.core.Instance;
 import weka.core.Instances;
@@ -15,37 +14,41 @@ public class Learn extends Agent {
 		super(memoryDepth);
 	}
 
+	public int makePrediction(int[] state) throws Exception{
+		Instance inst = new DenseInstance(7);
+		
+		if(memory[0] > 1)
+			inst.setValue(0, 1);
+		else
+			inst.setValue(0, 0);
+		if(memory[1] > 1)
+			inst.setValue(1, 1);
+		else
+			inst.setValue(1, 0);
+		if(memory[2] > 1)
+			inst.setValue(2, 1);
+		else
+			inst.setValue(2, 0);
+		inst.setValue(3, memory[0] % 2);
+		inst.setValue(4, memory[1] % 2);
+		inst.setValue(5, memory[2] % 2);
+		
+		
+			ArffLoader loader = new ArffLoader();
+			loader.setFile(new File("structure.arff"));
+			Instances structure = loader.getStructure();
+			structure.setClassIndex(structure.numAttributes() - 1);
+			structure.add(inst);
+			structure.setClassIndex(structure.numAttributes() - 1);
+			return (int) classifier.classifyInstance(structure.firstInstance());
+	}
+	
 	public int makeChoice() {
 		++turn;
 		int choice = 0;
 		if(turn>30){
-			Instance inst = new DenseInstance(7);
-			
-			if(memory[0] > 1)
-				inst.setValue(0, 1);
-			else
-				inst.setValue(0, 0);
-			if(memory[1] > 1)
-				inst.setValue(1, 1);
-			else
-				inst.setValue(1, 0);
-			if(memory[2] > 1)
-				inst.setValue(2, 1);
-			else
-				inst.setValue(2, 0);
-			inst.setValue(3, memory[0] % 2);
-			inst.setValue(4, memory[1] % 2);
-			inst.setValue(5, memory[2] % 2);
-			
-			
 			try {
-				ArffLoader loader = new ArffLoader();
-				loader.setFile(new File("structure.arff"));
-				Instances structure = loader.getStructure();
-				structure.setClassIndex(structure.numAttributes() - 1);
-				structure.add(inst);
-				structure.setClassIndex(structure.numAttributes() - 1);
-				choice = (int) classifier.classifyInstance(structure.firstInstance());
+				choice = makePrediction(memory);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -56,11 +59,7 @@ public class Learn extends Agent {
 				if(turn <= 20){
 					choice = 1;
 				}else{
-					//alternate
-					if(memory[0] > 1)
-						choice = 0;
-					else
-						choice = 1;
+					return turn%2;
 				}
 			}
 		}
